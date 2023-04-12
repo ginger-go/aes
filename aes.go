@@ -9,6 +9,11 @@ import (
 // EncryptToBytes encrypts the text with the given key and returns the encrypted bytes.
 func EncryptToBytes(text, key string) []byte {
 	src := []byte(text)
+	return EncryptBytesToBytes(src, key)
+}
+
+// EncryptBytesToBytes encrypts the bytes with the given key and returns the encrypted bytes.
+func EncryptBytesToBytes(src []byte, key string) []byte {
 	cipher := getCipher(key)
 	length := (len(src) + aes.BlockSize) / aes.BlockSize
 	plain := make([]byte, length*aes.BlockSize)
@@ -27,6 +32,11 @@ func EncryptToBytes(text, key string) []byte {
 
 // DecryptFromBytes decrypts the encrypted bytes with the given key and returns the decrypted text.
 func DecryptFromBytes(encrypted []byte, key string) string {
+	return string(DecryptBytesFromBytes(encrypted, key))
+}
+
+// DecryptBytesFromBytes decrypts the encrypted bytes with the given key and returns the decrypted bytes.
+func DecryptBytesFromBytes(encrypted []byte, key string) []byte {
 	cipher := getCipher(key)
 
 	decrypted := make([]byte, len(encrypted))
@@ -39,7 +49,7 @@ func DecryptFromBytes(encrypted []byte, key string) string {
 		trim = len(decrypted) - int(decrypted[len(decrypted)-1])
 	}
 
-	return string(decrypted[:trim])
+	return decrypted[:trim]
 }
 
 // EncryptToBase64 encrypts the text with the given key and returns the encrypted base64 string.
